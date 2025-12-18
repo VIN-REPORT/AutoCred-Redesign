@@ -10,17 +10,20 @@ import AOS from "aos";
 import "aos/dist/aos.css";
 import { toast } from "sonner";
 import emailjs from "@emailjs/browser";
+import { config } from "@/config";
 
 // Images from stock tool
 import heroImage from "@assets/stock_images/professional_mechani_f76e020a.jpg";
 import luxuryCarImage from "@assets/stock_images/luxury_red_car_or_sl_99441323.jpg";
 import mechanicTablet from "@assets/stock_images/mechanic_holding_a_t_65a77056.jpg";
-import logoImage from "@assets/generated_images/autocred_inspection_canada_logo.png";
+import logoImage from "@assets/generated_images/autocred_logo_transparent_background.png";
 
-// Initialize EmailJS
-emailjs.init("YOUR_PUBLIC_KEY_HERE");
+// Initialize EmailJS with config
+if (config.emailjs.publicKey !== "YOUR_EMAILJS_PUBLIC_KEY") {
+  emailjs.init(config.emailjs.publicKey);
+}
 
-const CONTACT_EMAIL = "autocredinspection@gmail.com";
+const CONTACT_EMAIL = config.emailjs.contactEmail;
 
 export default function Home() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -75,6 +78,12 @@ export default function Home() {
       return;
     }
 
+    // Check if EmailJS is configured
+    if (config.emailjs.publicKey === "YOUR_EMAILJS_PUBLIC_KEY") {
+      toast.error("EmailJS not configured yet. Contact admin to set it up.");
+      return;
+    }
+
     // Send via EmailJS to autocredinspection@gmail.com
     const templateParams = {
       to_email: CONTACT_EMAIL,
@@ -84,9 +93,18 @@ export default function Home() {
       reply_to: email
     };
 
-    // Note: Replace with actual EmailJS credentials when available
-    toast.success("Message sent to " + CONTACT_EMAIL + "! We'll get back to you shortly.");
-    (e.target as HTMLFormElement).reset();
+    try {
+      emailjs.send(
+        config.emailjs.serviceId,
+        config.emailjs.templateId,
+        templateParams
+      );
+      toast.success("Message sent to " + CONTACT_EMAIL + "! We'll get back to you shortly.");
+      (e.target as HTMLFormElement).reset();
+    } catch (error) {
+      toast.error("Failed to send message. Please try again.");
+      console.error("EmailJS error:", error);
+    }
   };
 
   const navLinks = [
@@ -372,22 +390,30 @@ export default function Home() {
                   <div className="space-y-3">
                     <Button 
                       onClick={() => {
-                        toast.success("Processing PayPal payment for $10.00");
+                        if (config.paypal.clientId === "YOUR_PAYPAL_CLIENT_ID") {
+                          toast.error("PayPal not configured yet. Contact admin to set it up.");
+                        } else {
+                          toast.success("Processing PayPal payment for $" + config.reportPrice);
+                        }
                       }}
                       className="w-full bg-primary hover:bg-red-700 text-white py-6 text-lg shadow-lg shadow-red-500/20"
                     >
-                      Pay via PayPal - $10.00
+                      Pay via PayPal - ${config.reportPrice}
                     </Button>
                     
                     <div className="text-center text-sm text-gray-500">OR</div>
 
                     <Button 
                       onClick={() => {
-                        toast.success("Processing Polar payment for $10.00");
+                        if (config.polar.publicKey === "YOUR_POLAR_PUBLIC_KEY") {
+                          toast.error("Polar not configured yet. Contact admin to set it up.");
+                        } else {
+                          toast.success("Processing Polar payment for $" + config.reportPrice);
+                        }
                       }}
                       className="w-full bg-neutral-700 hover:bg-neutral-800 text-white py-6 text-lg"
                     >
-                      Pay via Polar (Credit Card) - $10.00
+                      Pay via Polar (Credit Card) - ${config.reportPrice}
                     </Button>
                   </div>
                   
@@ -632,8 +658,11 @@ export default function Home() {
                   ></textarea>
                 </div>
                 <Button type="submit" className="w-full bg-neutral-900 hover:bg-neutral-800 text-white py-6">
-                  Send Message to {CONTACT_EMAIL}
+                  Send Message
                 </Button>
+                <p className="text-xs text-gray-400 text-center mt-2">
+                  Message will be sent to: {CONTACT_EMAIL}
+                </p>
             </form>
           </div>
         </div>
