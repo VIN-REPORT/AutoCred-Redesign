@@ -300,12 +300,12 @@ export default function Home() {
       {/* Report Form Section */}
       <section id="report" className="py-24 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid lg:grid-cols-2 gap-16 items-center">
+          <div className="grid lg:grid-cols-2 gap-8 md:gap-12 lg:gap-16 items-center">
             <div data-aos="fade-right">
-              <h2 className="text-3xl md:text-5xl font-bold mb-6 font-serif leading-tight">
+              <h2 className="text-2xl sm:text-3xl md:text-5xl font-bold mb-6 font-serif leading-tight">
                 Get Your Report <span className="text-primary">Now</span>
               </h2>
-              <p className="text-lg text-gray-600 mb-8 leading-relaxed">
+              <p className="text-base md:text-lg text-gray-600 mb-8 leading-relaxed">
                 Enter your details and the vehicle's VIN number to receive a comprehensive inspection report instantly. Peace of mind is just a few clicks away.
               </p>
               
@@ -340,7 +340,7 @@ export default function Home() {
               </div>
             </div>
 
-            <div className="bg-gray-50 p-8 md:p-10 rounded-3xl shadow-lg border border-gray-100" data-aos="fade-left">
+            <div className="bg-gray-50 p-6 sm:p-8 md:p-10 rounded-3xl shadow-lg border border-gray-100" data-aos="fade-left">
               {!reportSubmitted ? (
                 <form className="space-y-6" onSubmit={handleReportSubmit}>
                   <div className="grid grid-cols-2 gap-6">
@@ -428,11 +428,11 @@ export default function Home() {
       </section>
 
       {/* Global Reach Section */}
-      <section className="py-20 bg-neutral-900 text-white overflow-hidden">
+      <section className="py-16 md:py-20 bg-neutral-900 text-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-3xl md:text-4xl font-bold mb-12 font-serif" data-aos="fade-up">Serving Customers Worldwide</h2>
           
-          <div className="flex flex-wrap justify-center gap-8 md:gap-16">
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-6 md:gap-8">
             {[
               { name: "United States", flag: "🇺🇸" },
               { name: "Canada", flag: "🇨🇦" },
@@ -441,11 +441,11 @@ export default function Home() {
               { name: "France", flag: "🇫🇷" },
               { name: "Germany", flag: "🇩🇪" }
             ].map((country) => (
-              <div key={country.name} className="flex flex-col items-center gap-3" data-aos="zoom-in">
-                 <div className="text-6xl">
+              <div key={country.name} className="flex flex-col items-center justify-center gap-2 md:gap-3 p-4" data-aos="zoom-in">
+                 <div className="text-4xl md:text-5xl lg:text-6xl">
                    {country.flag}
                  </div>
-                 <span className="text-sm font-medium">{country.name}</span>
+                 <span className="text-xs md:text-sm font-medium text-gray-300">{country.name}</span>
               </div>
             ))}
           </div>
@@ -635,7 +635,7 @@ export default function Home() {
             <p className="text-gray-600">Have questions? We are here to help.</p>
           </div>
 
-          <div className="max-w-2xl mx-auto bg-white rounded-2xl shadow-lg p-8 md:p-10" data-aos="fade-up">
+          <div className="max-w-2xl mx-auto bg-white rounded-2xl shadow-lg p-6 sm:p-8 md:p-10" data-aos="fade-up">
             <form className="space-y-6" onSubmit={sendEmail}>
                <div className="grid grid-cols-2 gap-6">
                   <div className="space-y-2">
