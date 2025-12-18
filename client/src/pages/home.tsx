@@ -79,16 +79,20 @@ export default function Home() {
     // Save report data
     setReportData({ firstName, lastName, email, vin });
 
-    // If EmailJS is configured, send email. Otherwise, just proceed
+    // If EmailJS is configured, send email
     if (config.emailjs.publicKey !== "YOUR_EMAILJS_PUBLIC_KEY") {
       const templateParams = {
         to_email: CONTACT_EMAIL,
         from_name: `${firstName} ${lastName}`,
         from_email: email,
         vin_number: vin,
-        message: `Report Request\n\nClient: ${firstName} ${lastName}\nEmail: ${email}\nVIN: ${vin}`,
-        reply_to: email
+        client_name: `${firstName} ${lastName}`,
+        client_email: email,
+        client_vin: vin,
+        message: `Report Request\n\nClient: ${firstName} ${lastName}\nEmail: ${email}\nVIN: ${vin}`
       };
+
+      console.log("Sending report via EmailJS to:", CONTACT_EMAIL, "with data:", templateParams);
 
       emailjs
         .send(
@@ -96,18 +100,21 @@ export default function Home() {
           config.emailjs.templateId,
           templateParams
         )
-        .then(() => {
+        .then((response) => {
+          console.log("EmailJS Success:", response);
           setReportSubmitted(true);
-          toast.success("✅ Details sent to " + CONTACT_EMAIL + "! Proceed with payment.");
+          toast.success(`✅ Details sent to ${CONTACT_EMAIL}!\n\nClient: ${firstName} ${lastName}\nEmail: ${email}\nVIN: ${vin}`);
         })
-        .catch(() => {
+        .catch((error) => {
+          console.error("EmailJS Error:", error);
           setReportSubmitted(true);
           toast.success("Details captured! Proceed with payment.");
         });
     } else {
       // Mockup mode - just proceed without sending email
       setReportSubmitted(true);
-      toast.success("✅ Details captured! Proceed with payment.");
+      toast.success("✅ Details captured! Proceed with payment.\n\n(EmailJS not configured yet)");
+      console.log("Mockup mode - Data would be sent:", { firstName, lastName, email, vin });
     }
   };
 
