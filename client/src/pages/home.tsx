@@ -95,7 +95,13 @@ export default function Home() {
                   {link.name}
                 </a>
               ))}
-              <Button className="bg-primary hover:bg-red-700 text-white font-semibold rounded-full px-6 shadow-lg shadow-red-500/30 transition-all hover:scale-105">
+              <Button 
+                onClick={() => {
+                  const element = document.querySelector("#report");
+                  if (element) element.scrollIntoView({ behavior: "smooth" });
+                }}
+                className="bg-primary hover:bg-red-700 text-white font-semibold rounded-full px-6 shadow-lg shadow-red-500/30 transition-all hover:scale-105"
+              >
                 Get Report
               </Button>
             </div>
@@ -132,7 +138,14 @@ export default function Home() {
                     {link.name}
                   </a>
                 ))}
-                <Button className="w-full bg-primary hover:bg-red-700 text-white mt-4">
+                <Button 
+                  onClick={() => {
+                    setMobileMenuOpen(false);
+                    const element = document.querySelector("#report");
+                    if (element) element.scrollIntoView({ behavior: "smooth" });
+                  }}
+                  className="w-full bg-primary hover:bg-red-700 text-white mt-4"
+                >
                   Get Report
                 </Button>
               </div>
@@ -163,7 +176,14 @@ export default function Home() {
               Protect yourself from buying a used car with hidden problems. Our comprehensive inspections give you the information you need to make a confident decision.
             </p>
             <div className="flex flex-col sm:flex-row gap-4">
-              <Button size="lg" className="bg-primary hover:bg-red-700 text-white text-lg px-8 py-6 h-auto rounded-full shadow-xl shadow-red-600/20">
+              <Button 
+                onClick={() => {
+                  const element = document.querySelector("#report");
+                  if (element) element.scrollIntoView({ behavior: "smooth" });
+                }}
+                size="lg" 
+                className="bg-primary hover:bg-red-700 text-white text-lg px-8 py-6 h-auto rounded-full shadow-xl shadow-red-600/20"
+              >
                 Get Your Report Now
                 <ArrowRight className="ml-2 w-5 h-5" />
               </Button>
