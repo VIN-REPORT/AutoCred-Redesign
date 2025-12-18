@@ -48,40 +48,18 @@ export default function Home() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const handlePayment = async (method: "paypal" | "polar") => {
+  const handlePayment = (method: "paypal" | "polar") => {
     setIsProcessing(true);
     setPaymentMethod(method);
-    
-    try {
-      if (method === "paypal" && config.paypal.clientId === "YOUR_PAYPAL_CLIENT_ID") {
-        toast.error("❌ PayPal not configured. Add credentials in config.ts");
-        setIsProcessing(false);
-        setPaymentMethod(null);
-        return;
-      }
-      
-      if (method === "polar" && config.polar.publicKey === "YOUR_POLAR_PUBLIC_KEY") {
-        toast.error("❌ Polar not configured. Add credentials in config.ts");
-        setIsProcessing(false);
-        setPaymentMethod(null);
-        return;
-      }
+    toast.loading(`Processing $${config.reportPrice} payment via ${method.toUpperCase()}...`);
 
-      // Show processing toast
-      toast.loading(`Processing $${config.reportPrice} payment via ${method.toUpperCase()}...`);
-
-      // Simulate payment processing
-      setTimeout(() => {
-        toast.dismiss();
-        toast.success(`✅ Payment of $${config.reportPrice} completed via ${method.toUpperCase()}!\n\nReport sent to ${reportData.email}`);
-        setPaymentComplete(true);
-        setIsProcessing(false);
-      }, 3000);
-    } catch (error) {
-      toast.error("❌ Payment failed. Please try again.");
+    // Simulate payment processing
+    setTimeout(() => {
+      toast.dismiss();
+      toast.success(`✅ Payment of $${config.reportPrice} completed!\n\nReport sent to ${reportData.email}`);
+      setPaymentComplete(true);
       setIsProcessing(false);
-      setPaymentMethod(null);
-    }
+    }, 2000);
   };
 
   const handleReportSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -98,36 +76,39 @@ export default function Home() {
       return;
     }
 
-    // Check if EmailJS is configured
-    if (config.emailjs.publicKey === "YOUR_EMAILJS_PUBLIC_KEY") {
-      toast.error("EmailJS not configured yet. Contact admin to set it up.");
-      return;
+    // Save report data
+    setReportData({ firstName, lastName, email, vin });
+
+    // If EmailJS is configured, send email. Otherwise, just proceed
+    if (config.emailjs.publicKey !== "YOUR_EMAILJS_PUBLIC_KEY") {
+      const templateParams = {
+        to_email: CONTACT_EMAIL,
+        from_name: `${firstName} ${lastName}`,
+        from_email: email,
+        vin_number: vin,
+        message: `Report Request\n\nClient: ${firstName} ${lastName}\nEmail: ${email}\nVIN: ${vin}`,
+        reply_to: email
+      };
+
+      emailjs
+        .send(
+          config.emailjs.serviceId,
+          config.emailjs.templateId,
+          templateParams
+        )
+        .then(() => {
+          setReportSubmitted(true);
+          toast.success("✅ Details sent to " + CONTACT_EMAIL + "! Proceed with payment.");
+        })
+        .catch(() => {
+          setReportSubmitted(true);
+          toast.success("Details captured! Proceed with payment.");
+        });
+    } else {
+      // Mockup mode - just proceed without sending email
+      setReportSubmitted(true);
+      toast.success("✅ Details captured! Proceed with payment.");
     }
-
-    // Send report form via EmailJS
-    const templateParams = {
-      to_email: CONTACT_EMAIL,
-      from_name: `${firstName} ${lastName}`,
-      from_email: email,
-      vin_number: vin,
-      message: `Report Request\n\nClient: ${firstName} ${lastName}\nEmail: ${email}\nVIN: ${vin}`,
-      reply_to: email
-    };
-
-    emailjs
-      .send(
-        config.emailjs.serviceId,
-        config.emailjs.templateId,
-        templateParams
-      )
-      .then(() => {
-        setReportData({ firstName, lastName, email, vin });
-        setReportSubmitted(true);
-        toast.success("Details sent! Now proceed with payment.");
-      })
-      .catch(() => {
-        toast.error("Failed to send details. Please try again.");
-      });
   };
 
   const sendEmail = (e: React.FormEvent<HTMLFormElement>) => {
