@@ -28,7 +28,10 @@ export default function Home() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [reportSubmitted, setReportSubmitted] = useState(false);
+  const [paymentComplete, setPaymentComplete] = useState(false);
   const [reportData, setReportData] = useState({ firstName: "", lastName: "", email: "", vin: "" });
+  const [paymentMethod, setPaymentMethod] = useState<"paypal" | "polar" | null>(null);
+  const [isProcessing, setIsProcessing] = useState(false);
 
   useEffect(() => {
     AOS.init({
@@ -44,6 +47,35 @@ export default function Home() {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  const handlePayment = async (method: "paypal" | "polar") => {
+    setIsProcessing(true);
+    setPaymentMethod(method);
+    
+    try {
+      if (method === "paypal" && config.paypal.clientId === "YOUR_PAYPAL_CLIENT_ID") {
+        toast.error("PayPal not configured. Contact admin to set it up.");
+        setIsProcessing(false);
+        return;
+      }
+      
+      if (method === "polar" && config.polar.publicKey === "YOUR_POLAR_PUBLIC_KEY") {
+        toast.error("Polar not configured. Contact admin to set it up.");
+        setIsProcessing(false);
+        return;
+      }
+
+      // Simulate payment processing
+      setTimeout(() => {
+        toast.success(`Payment of $${config.reportPrice} via ${method.toUpperCase()} completed!`);
+        setPaymentComplete(true);
+        setIsProcessing(false);
+      }, 2000);
+    } catch (error) {
+      toast.error("Payment failed. Please try again.");
+      setIsProcessing(false);
+    }
+  };
 
   const handleReportSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -374,6 +406,34 @@ export default function Home() {
                     </p>
                   </div>
                 </form>
+              ) : paymentComplete ? (
+                <div className="text-center py-8">
+                  <motion.div
+                    animate={{ scale: [0, 1], rotate: [0, 360] }}
+                    transition={{ duration: 0.6 }}
+                    className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4"
+                  >
+                    <Check className="w-10 h-10 text-green-600" />
+                  </motion.div>
+                  <h3 className="text-2xl font-bold mb-2">Payment Successful!</h3>
+                  <p className="text-gray-600 mb-4">
+                    Your inspection report will be sent to <span className="font-semibold">{reportData.email}</span> within 24 hours.
+                  </p>
+                  <p className="text-sm text-gray-500 mb-6">
+                    Payment Method: <span className="font-semibold uppercase">{paymentMethod}</span>
+                  </p>
+                  
+                  <Button 
+                    onClick={() => {
+                      setReportSubmitted(false);
+                      setPaymentComplete(false);
+                      setPaymentMethod(null);
+                    }}
+                    className="w-full bg-primary hover:bg-red-700 text-white py-6 text-lg shadow-lg shadow-red-500/20"
+                  >
+                    Get Another Report
+                  </Button>
+                </div>
               ) : (
                 <div className="text-center">
                   <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
@@ -386,37 +446,28 @@ export default function Home() {
                   
                   <div className="space-y-3">
                     <Button 
-                      onClick={() => {
-                        if (config.paypal.clientId === "YOUR_PAYPAL_CLIENT_ID") {
-                          toast.error("PayPal not configured yet. Contact admin to set it up.");
-                        } else {
-                          toast.success("Processing PayPal payment for $" + config.reportPrice);
-                        }
-                      }}
-                      className="w-full bg-primary hover:bg-red-700 text-white py-6 text-lg shadow-lg shadow-red-500/20"
+                      onClick={() => handlePayment("paypal")}
+                      disabled={isProcessing}
+                      className="w-full bg-primary hover:bg-red-700 text-white py-6 text-lg shadow-lg shadow-red-500/20 disabled:opacity-50"
                     >
-                      Pay via PayPal - ${config.reportPrice}
+                      {isProcessing && paymentMethod === "paypal" ? "Processing..." : `Pay via PayPal - $${config.reportPrice}`}
                     </Button>
                     
                     <div className="text-center text-sm text-gray-500">OR</div>
 
                     <Button 
-                      onClick={() => {
-                        if (config.polar.publicKey === "YOUR_POLAR_PUBLIC_KEY") {
-                          toast.error("Polar not configured yet. Contact admin to set it up.");
-                        } else {
-                          toast.success("Processing Polar payment for $" + config.reportPrice);
-                        }
-                      }}
-                      className="w-full bg-neutral-700 hover:bg-neutral-800 text-white py-6 text-lg"
+                      onClick={() => handlePayment("polar")}
+                      disabled={isProcessing}
+                      className="w-full bg-neutral-700 hover:bg-neutral-800 text-white py-6 text-lg disabled:opacity-50"
                     >
-                      Pay via Polar (Credit Card) - ${config.reportPrice}
+                      {isProcessing && paymentMethod === "polar" ? "Processing..." : `Pay via Polar (Credit Card) - $${config.reportPrice}`}
                     </Button>
                   </div>
                   
                   <button 
                     onClick={() => setReportSubmitted(false)}
-                    className="text-primary hover:text-red-700 text-sm mt-4 underline"
+                    disabled={isProcessing}
+                    className="text-primary hover:text-red-700 text-sm mt-4 underline disabled:opacity-50"
                   >
                     Back to edit details
                   </button>
