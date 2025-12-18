@@ -8,20 +8,16 @@ import { Label } from "@/components/ui/label";
 import { Footer } from "@/components/Footer";
 import AOS from "aos";
 import "aos/dist/aos.css";
-import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
-import emailjs from "@emailjs/browser";
-import { useToast } from "@/hooks/use-toast";
+import { toast } from "sonner";
 
 // Images from stock tool
 import heroImage from "@assets/stock_images/professional_mechani_f76e020a.jpg";
-import carLiftImage from "@assets/stock_images/car_underbody_inspec_9aa272cb.jpg";
 import luxuryCarImage from "@assets/stock_images/luxury_red_car_or_sl_99441323.jpg";
 import mechanicTablet from "@assets/stock_images/mechanic_holding_a_t_65a77056.jpg";
 
 export default function Home() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const { toast } = useToast();
 
   useEffect(() => {
     AOS.init({
@@ -45,10 +41,7 @@ export default function Home() {
     // emailjs.sendForm('YOUR_SERVICE_ID', 'YOUR_TEMPLATE_ID', e.currentTarget, 'YOUR_PUBLIC_KEY')
     
     // Simulating success for now
-    toast({
-      title: "Message Sent!",
-      description: "We'll get back to you shortly.",
-    });
+    toast.success("Message Sent! We'll get back to you shortly.");
     (e.target as HTMLFormElement).reset();
   };
 
@@ -314,44 +307,27 @@ export default function Home() {
                 </div>
 
                 <div className="pt-4">
-                  {/* PayPal Integration */}
-                  <PayPalScriptProvider options={{ clientId: "test", currency: "USD" }}>
-                    <div className="mb-4">
-                       <PayPalButtons 
-                          style={{ layout: "vertical", color: "gold", shape: "rect", label: "pay" }}
-                          createOrder={(data, actions) => {
-                            return actions.order.create({
-                              intent: "CAPTURE",
-                              purchase_units: [
-                                {
-                                  amount: {
-                                    value: "10.00",
-                                    currency_code: "USD"
-                                  },
-                                },
-                              ],
-                            });
-                          }}
-                          onApprove={async (data, actions) => {
-                            if (actions.order) {
-                                await actions.order.capture();
-                                toast({
-                                  title: "Payment Successful",
-                                  description: "Thank you for your purchase!",
-                                });
-                            }
-                          }}
-                       />
-                    </div>
-                  </PayPalScriptProvider>
+                  <Button 
+                    onClick={() => {
+                      toast.success("Payment would be processed here via PayPal - $10.00");
+                    }}
+                    className="w-full bg-primary hover:bg-red-700 text-white py-6 text-lg shadow-lg shadow-red-500/20 mb-3"
+                  >
+                    Pay via PayPal - $10.00
+                  </Button>
                   
                   <div className="text-center my-2 text-sm text-gray-500">- OR -</div>
 
-                  <Button className="w-full bg-primary hover:bg-red-700 text-white py-6 text-lg shadow-lg shadow-red-500/20">
-                    Pay via Polar (Credit Card)
+                  <Button 
+                    onClick={() => {
+                      toast.success("Payment would be processed here via Polar - $10.00");
+                    }}
+                    className="w-full bg-neutral-700 hover:bg-neutral-800 text-white py-6 text-lg mb-4"
+                  >
+                    Pay via Polar (Credit Card) - $10.00
                   </Button>
                   
-                  <p className="text-center text-xs text-gray-500 mt-4">
+                  <p className="text-center text-xs text-gray-500">
                     By clicking submit, you agree to our Terms of Service and Privacy Policy.
                   </p>
                 </div>
