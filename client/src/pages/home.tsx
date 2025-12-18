@@ -16,7 +16,6 @@ import { config } from "@/config";
 import heroImage from "@assets/stock_images/professional_mechani_f76e020a.jpg";
 import luxuryCarImage from "@assets/stock_images/luxury_red_car_or_sl_99441323.jpg";
 import mechanicTablet from "@assets/stock_images/mechanic_holding_a_t_65a77056.jpg";
-import logoImage from "@assets/generated_images/autocred_logo_transparent_background.png";
 
 // Initialize EmailJS with config
 if (config.emailjs.publicKey !== "YOUR_EMAILJS_PUBLIC_KEY") {
@@ -127,12 +126,10 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center">
             {/* Logo */}
-            <div className="flex items-center gap-3">
-              <img 
-                src={logoImage} 
-                alt="AutoCred Inspection Logo" 
-                className="h-12 w-auto"
-              />
+            <div className="flex items-center gap-2">
+              <span className={`text-xl md:text-2xl font-bold font-serif ${isScrolled ? "text-gray-900" : "text-white"}`}>
+                Auto<span className="text-primary">Cred</span>
+              </span>
             </div>
 
             {/* Desktop Menu */}
@@ -435,14 +432,20 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-3xl md:text-4xl font-bold mb-12 font-serif" data-aos="fade-up">Serving Customers Worldwide</h2>
           
-          <div className="flex flex-wrap justify-center gap-8 md:gap-16 opacity-70">
-            {/* Flags Placeholders - Replacing with text for now as per constraints, could be images */}
-            {["United States", "Canada", "United Kingdom", "Australia", "France", "Germany"].map((country) => (
-              <div key={country} className="flex flex-col items-center gap-3" data-aos="zoom-in">
-                 <div className="w-16 h-10 bg-neutral-800 rounded flex items-center justify-center text-xs border border-neutral-700">
-                   Flag
+          <div className="flex flex-wrap justify-center gap-8 md:gap-16">
+            {[
+              { name: "United States", flag: "🇺🇸" },
+              { name: "Canada", flag: "🇨🇦" },
+              { name: "United Kingdom", flag: "🇬🇧" },
+              { name: "Australia", flag: "🇦🇺" },
+              { name: "France", flag: "🇫🇷" },
+              { name: "Germany", flag: "🇩🇪" }
+            ].map((country) => (
+              <div key={country.name} className="flex flex-col items-center gap-3" data-aos="zoom-in">
+                 <div className="text-6xl">
+                   {country.flag}
                  </div>
-                 <span className="text-sm font-medium">{country}</span>
+                 <span className="text-sm font-medium">{country.name}</span>
               </div>
             ))}
           </div>
