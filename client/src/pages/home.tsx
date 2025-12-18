@@ -54,26 +54,33 @@ export default function Home() {
     
     try {
       if (method === "paypal" && config.paypal.clientId === "YOUR_PAYPAL_CLIENT_ID") {
-        toast.error("PayPal not configured. Contact admin to set it up.");
+        toast.error("❌ PayPal not configured. Add credentials in config.ts");
         setIsProcessing(false);
+        setPaymentMethod(null);
         return;
       }
       
       if (method === "polar" && config.polar.publicKey === "YOUR_POLAR_PUBLIC_KEY") {
-        toast.error("Polar not configured. Contact admin to set it up.");
+        toast.error("❌ Polar not configured. Add credentials in config.ts");
         setIsProcessing(false);
+        setPaymentMethod(null);
         return;
       }
 
+      // Show processing toast
+      toast.loading(`Processing $${config.reportPrice} payment via ${method.toUpperCase()}...`);
+
       // Simulate payment processing
       setTimeout(() => {
-        toast.success(`Payment of $${config.reportPrice} via ${method.toUpperCase()} completed!`);
+        toast.dismiss();
+        toast.success(`✅ Payment of $${config.reportPrice} completed via ${method.toUpperCase()}!\n\nReport sent to ${reportData.email}`);
         setPaymentComplete(true);
         setIsProcessing(false);
-      }, 2000);
+      }, 3000);
     } catch (error) {
-      toast.error("Payment failed. Please try again.");
+      toast.error("❌ Payment failed. Please try again.");
       setIsProcessing(false);
+      setPaymentMethod(null);
     }
   };
 
@@ -91,9 +98,36 @@ export default function Home() {
       return;
     }
 
-    setReportData({ firstName, lastName, email, vin });
-    setReportSubmitted(true);
-    toast.success("Details received! Please proceed with payment.");
+    // Check if EmailJS is configured
+    if (config.emailjs.publicKey === "YOUR_EMAILJS_PUBLIC_KEY") {
+      toast.error("EmailJS not configured yet. Contact admin to set it up.");
+      return;
+    }
+
+    // Send report form via EmailJS
+    const templateParams = {
+      to_email: CONTACT_EMAIL,
+      from_name: `${firstName} ${lastName}`,
+      from_email: email,
+      vin_number: vin,
+      message: `Report Request\n\nClient: ${firstName} ${lastName}\nEmail: ${email}\nVIN: ${vin}`,
+      reply_to: email
+    };
+
+    emailjs
+      .send(
+        config.emailjs.serviceId,
+        config.emailjs.templateId,
+        templateParams
+      )
+      .then(() => {
+        setReportData({ firstName, lastName, email, vin });
+        setReportSubmitted(true);
+        toast.success("Details sent! Now proceed with payment.");
+      })
+      .catch(() => {
+        toast.error("Failed to send details. Please try again.");
+      });
   };
 
   const sendEmail = (e: React.FormEvent<HTMLFormElement>) => {
