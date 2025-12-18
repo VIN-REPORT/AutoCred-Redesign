@@ -82,7 +82,7 @@ export function Footer() {
             <ul className="space-y-4">
               <li className="flex items-start">
                 <MapPin className="w-5 h-5 text-primary mt-1 mr-3 shrink-0" />
-                <span className="text-gray-400">123 Auto Inspection Blvd, Car City, AC 12345</span>
+                <span className="text-gray-400">362 Maplewood Drive, Springfield, IL 62704</span>
               </li>
               <li className="flex items-center">
                 <Phone className="w-5 h-5 text-primary mr-3 shrink-0" />
