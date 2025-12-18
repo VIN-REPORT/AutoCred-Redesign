@@ -15,6 +15,7 @@ import emailjs from "@emailjs/browser";
 import heroImage from "@assets/stock_images/professional_mechani_f76e020a.jpg";
 import luxuryCarImage from "@assets/stock_images/luxury_red_car_or_sl_99441323.jpg";
 import mechanicTablet from "@assets/stock_images/mechanic_holding_a_t_65a77056.jpg";
+import logoImage from "@assets/generated_images/autocred_inspection_canada_logo.png";
 
 // Initialize EmailJS
 emailjs.init("YOUR_PUBLIC_KEY_HERE");
@@ -107,15 +108,13 @@ export default function Home() {
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center">
-            {/* Logo Placeholder */}
-            <div className="flex items-center gap-2">
-               {/* Replace with actual logo when provided */}
-              <div className="flex items-center justify-center w-10 h-10 bg-primary rounded-lg text-white font-bold text-xl">
-                A
-              </div>
-              <span className={`text-2xl font-bold font-serif ${isScrolled ? "text-gray-900" : "text-white"}`}>
-                Auto<span className="text-primary">Cred</span> Inspection
-              </span>
+            {/* Logo */}
+            <div className="flex items-center gap-3">
+              <img 
+                src={logoImage} 
+                alt="AutoCred Inspection Logo" 
+                className="h-12 w-auto"
+              />
             </div>
 
             {/* Desktop Menu */}
@@ -547,11 +546,14 @@ export default function Home() {
             </div>
 
             <div className="relative" data-aos="fade-left">
-              <div className="absolute inset-0 bg-primary/10 rounded-3xl transform rotate-3" />
+              <div className="absolute -inset-4 bg-primary/10 rounded-3xl transform rotate-2" />
+              <div className="absolute inset-0 bg-gradient-to-br from-primary/20 to-transparent rounded-3xl" />
               <img 
                 src={mechanicTablet} 
-                alt="Professional Mechanic" 
-                className="relative rounded-3xl shadow-xl w-full h-[600px] object-cover"
+                alt="Professional Mechanic Technician" 
+                loading="lazy"
+                className="relative z-10 rounded-3xl shadow-2xl w-full h-auto max-h-[600px] object-contain"
+                style={{ minHeight: '400px' }}
               />
             </div>
           </div>
