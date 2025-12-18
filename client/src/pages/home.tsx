@@ -9,15 +9,23 @@ import { Footer } from "@/components/Footer";
 import AOS from "aos";
 import "aos/dist/aos.css";
 import { toast } from "sonner";
+import emailjs from "@emailjs/browser";
 
 // Images from stock tool
 import heroImage from "@assets/stock_images/professional_mechani_f76e020a.jpg";
 import luxuryCarImage from "@assets/stock_images/luxury_red_car_or_sl_99441323.jpg";
 import mechanicTablet from "@assets/stock_images/mechanic_holding_a_t_65a77056.jpg";
 
+// Initialize EmailJS
+emailjs.init("YOUR_PUBLIC_KEY_HERE");
+
+const CONTACT_EMAIL = "autocredinspection@gmail.com";
+
 export default function Home() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [reportSubmitted, setReportSubmitted] = useState(false);
+  const [reportData, setReportData] = useState({ firstName: "", lastName: "", email: "", vin: "" });
 
   useEffect(() => {
     AOS.init({
@@ -34,14 +42,49 @@ export default function Home() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  const handleReportSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const form = e.currentTarget;
+    
+    const firstName = (form.querySelector("#firstName") as HTMLInputElement)?.value || "";
+    const lastName = (form.querySelector("#lastName") as HTMLInputElement)?.value || "";
+    const email = (form.querySelector("#email") as HTMLInputElement)?.value || "";
+    const vin = (form.querySelector("#vin") as HTMLInputElement)?.value || "";
+
+    if (!firstName || !email || !vin) {
+      toast.error("Please fill in all required fields");
+      return;
+    }
+
+    setReportData({ firstName, lastName, email, vin });
+    setReportSubmitted(true);
+    toast.success("Details received! Please proceed with payment.");
+  };
+
   const sendEmail = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     
-    // Replace these with your actual EmailJS credentials
-    // emailjs.sendForm('YOUR_SERVICE_ID', 'YOUR_TEMPLATE_ID', e.currentTarget, 'YOUR_PUBLIC_KEY')
-    
-    // Simulating success for now
-    toast.success("Message Sent! We'll get back to you shortly.");
+    const firstName = (e.currentTarget.querySelector("#contact-firstName") as HTMLInputElement)?.value;
+    const lastName = (e.currentTarget.querySelector("#contact-lastName") as HTMLInputElement)?.value;
+    const email = (e.currentTarget.querySelector("#contact-email") as HTMLInputElement)?.value;
+    const message = (e.currentTarget.querySelector("#contact-message") as HTMLTextAreaElement)?.value;
+
+    if (!firstName || !email || !message) {
+      toast.error("Please fill in all required fields");
+      return;
+    }
+
+    // Send via EmailJS to autocredinspection@gmail.com
+    const templateParams = {
+      to_email: CONTACT_EMAIL,
+      from_name: `${firstName} ${lastName}`,
+      from_email: email,
+      message: message,
+      reply_to: email
+    };
+
+    // Note: Replace with actual EmailJS credentials when available
+    toast.success("Message sent to " + CONTACT_EMAIL + "! We'll get back to you shortly.");
     (e.target as HTMLFormElement).reset();
   };
 
@@ -284,54 +327,79 @@ export default function Home() {
             </div>
 
             <div className="bg-gray-50 p-8 md:p-10 rounded-3xl shadow-lg border border-gray-100" data-aos="fade-left">
-              <form className="space-y-6">
-                <div className="grid grid-cols-2 gap-6">
-                  <div className="space-y-2">
-                    <Label htmlFor="firstName">First Name</Label>
-                    <Input id="firstName" placeholder="John" className="bg-white" />
+              {!reportSubmitted ? (
+                <form className="space-y-6" onSubmit={handleReportSubmit}>
+                  <div className="grid grid-cols-2 gap-6">
+                    <div className="space-y-2">
+                      <Label htmlFor="firstName">First Name *</Label>
+                      <Input id="firstName" placeholder="John" className="bg-white" required />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="lastName">Last Name</Label>
+                      <Input id="lastName" placeholder="Doe" className="bg-white" />
+                    </div>
                   </div>
+                  
                   <div className="space-y-2">
-                    <Label htmlFor="lastName">Last Name</Label>
-                    <Input id="lastName" placeholder="Doe" className="bg-white" />
+                    <Label htmlFor="email">Email Address *</Label>
+                    <Input id="email" type="email" placeholder="john@example.com" className="bg-white" required />
                   </div>
-                </div>
-                
-                <div className="space-y-2">
-                  <Label htmlFor="email">Email Address</Label>
-                  <Input id="email" type="email" placeholder="john@example.com" className="bg-white" />
-                </div>
-                
-                <div className="space-y-2">
-                  <Label htmlFor="vin">Car VIN Number</Label>
-                  <Input id="vin" placeholder="Enter 17-digit VIN" className="bg-white uppercase" maxLength={17} />
-                </div>
-
-                <div className="pt-4">
-                  <Button 
-                    onClick={() => {
-                      toast.success("Payment would be processed here via PayPal - $10.00");
-                    }}
-                    className="w-full bg-primary hover:bg-red-700 text-white py-6 text-lg shadow-lg shadow-red-500/20 mb-3"
-                  >
-                    Pay via PayPal - $10.00
-                  </Button>
                   
-                  <div className="text-center my-2 text-sm text-gray-500">- OR -</div>
+                  <div className="space-y-2">
+                    <Label htmlFor="vin">Car VIN Number *</Label>
+                    <Input id="vin" placeholder="Enter 17-digit VIN" className="bg-white uppercase" maxLength={17} required />
+                  </div>
 
-                  <Button 
-                    onClick={() => {
-                      toast.success("Payment would be processed here via Polar - $10.00");
-                    }}
-                    className="w-full bg-neutral-700 hover:bg-neutral-800 text-white py-6 text-lg mb-4"
-                  >
-                    Pay via Polar (Credit Card) - $10.00
-                  </Button>
-                  
-                  <p className="text-center text-xs text-gray-500">
-                    By clicking submit, you agree to our Terms of Service and Privacy Policy.
+                  <div className="pt-4">
+                    <Button type="submit" className="w-full bg-primary hover:bg-red-700 text-white py-6 text-lg shadow-lg shadow-red-500/20">
+                      Continue to Payment
+                    </Button>
+                    
+                    <p className="text-center text-xs text-gray-500 mt-4">
+                      By clicking continue, you agree to our Terms of Service and Privacy Policy.
+                    </p>
+                  </div>
+                </form>
+              ) : (
+                <div className="text-center">
+                  <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <Check className="w-8 h-8 text-green-600" />
+                  </div>
+                  <h3 className="text-2xl font-bold mb-2">Great! Now Complete Payment</h3>
+                  <p className="text-gray-600 mb-6">
+                    We'll send your report to <span className="font-semibold">{reportData.email}</span>
                   </p>
+                  
+                  <div className="space-y-3">
+                    <Button 
+                      onClick={() => {
+                        toast.success("Processing PayPal payment for $10.00");
+                      }}
+                      className="w-full bg-primary hover:bg-red-700 text-white py-6 text-lg shadow-lg shadow-red-500/20"
+                    >
+                      Pay via PayPal - $10.00
+                    </Button>
+                    
+                    <div className="text-center text-sm text-gray-500">OR</div>
+
+                    <Button 
+                      onClick={() => {
+                        toast.success("Processing Polar payment for $10.00");
+                      }}
+                      className="w-full bg-neutral-700 hover:bg-neutral-800 text-white py-6 text-lg"
+                    >
+                      Pay via Polar (Credit Card) - $10.00
+                    </Button>
+                  </div>
+                  
+                  <button 
+                    onClick={() => setReportSubmitted(false)}
+                    className="text-primary hover:text-red-700 text-sm mt-4 underline"
+                  >
+                    Back to edit details
+                  </button>
                 </div>
-              </form>
+              )}
             </div>
           </div>
         </div>
@@ -540,8 +608,8 @@ export default function Home() {
             <form className="space-y-6" onSubmit={sendEmail}>
                <div className="grid grid-cols-2 gap-6">
                   <div className="space-y-2">
-                    <Label htmlFor="contact-firstName">First Name</Label>
-                    <Input id="contact-firstName" className="bg-gray-50 border-gray-200" />
+                    <Label htmlFor="contact-firstName">First Name *</Label>
+                    <Input id="contact-firstName" className="bg-gray-50 border-gray-200" required />
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="contact-lastName">Last Name</Label>
@@ -549,22 +617,20 @@ export default function Home() {
                   </div>
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="contact-email">Email</Label>
-                  <Input id="contact-email" type="email" className="bg-gray-50 border-gray-200" />
+                  <Label htmlFor="contact-email">Email *</Label>
+                  <Input id="contact-email" type="email" className="bg-gray-50 border-gray-200" required />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="contact-vin">Car VIN Number</Label>
-                  <Input id="contact-vin" className="bg-gray-50 border-gray-200" />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="contact-message">Message</Label>
+                  <Label htmlFor="contact-message">Message *</Label>
                   <textarea 
                     id="contact-message" 
+                    placeholder="How can we help you?"
                     className="flex min-h-[120px] w-full rounded-md border border-gray-200 bg-gray-50 px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                    required
                   ></textarea>
                 </div>
-                <Button className="w-full bg-neutral-900 hover:bg-neutral-800 text-white py-6">
-                  Send Message
+                <Button type="submit" className="w-full bg-neutral-900 hover:bg-neutral-800 text-white py-6">
+                  Send Message to {CONTACT_EMAIL}
                 </Button>
             </form>
           </div>
