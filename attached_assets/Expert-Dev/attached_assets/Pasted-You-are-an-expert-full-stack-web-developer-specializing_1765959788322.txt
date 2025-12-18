@@ -1,0 +1,31 @@
+You are an expert full-stack web developer specializing in HTML, CSS (Tailwind/Bootstrap if needed), JavaScript, and modern animations.
+I am providing the complete code/files of my current website (previously "AutoCheck Pro").
+Your task is to completely redesign and rebuild it to look and function EXACTLY like the reference website: https://autokinspection.com (layout, sections, flow, fonts, spacing, design).
+Mandatory changes:
+Replace ALL blue colors with professional Pure Red theme:
+Main red: #FF0000
+Complementary shades for buttons, hovers, gradients (e.g., #CC0000 hover, #FF3333 accents).
+Change site name everywhere to "AutoCred Inspection".
+Add professional sticky navbar exactly like reference:
+Logo on left: For now, use a clean placeholder (stylish text "AutoCred Inspection" in modern font with red accent).
+IMPORTANT: When you reach the stage of finalizing the navbar/logo placement, send me a message saying: "Bhai, ab logo bhej do – image upload kar do ya link de do." Then wait for me to provide the actual logo image before finalizing.
+Menu items exactly like reference (Home, Services, About Us, Contact etc.).
+Fully responsive hamburger menu.
+Replicate entire site structure 100%: hero, services, global areas, about, history, why choose us, contact, footer etc.
+Add smooth modern animations (fade-in on scroll, hover zoom on car/mechanic images) using AOS or pure CSS/JS.
+All navigation, buttons, links, mobile menu must work perfectly.
+REMOVE COMPLETELY:
+All EmailJS code/scripts/integration.
+All payment systems (PayPal, Stripe, pricing buttons/forms).
+All pricing sections/content.
+Any email submission functionality – contact form static ya non-functional rakho.
+Requirements:
+Fully responsive.
+Clean, professional, semantic code.
+Fast loading, good meta tags.
+Final steps:
+Thoroughly test everything: links, mobile menu, animations, responsiveness.
+Confirm no EmailJS/payment code left.
+Provide complete updated code (HTML, CSS, JS separate if needed).
+First analyze https://autokinspection.com carefully.
+I will send current site code next. Wait for it, then start.

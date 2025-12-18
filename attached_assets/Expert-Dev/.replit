@@ -4,7 +4,6 @@ hidden = [".config", ".git", "generated-icon.png", "node_modules", "dist"]
 
 [nix]
 channel = "stable-24_05"
-packages = ["unzip"]
 
 [[ports]]
 localPort = 5000
@@ -14,9 +13,9 @@ externalPort = 80
 PORT = "5000"
 
 [deployment]
-deploymentTarget = "static"
+deploymentTarget = "autoscale"
+run = ["node", "./dist/index.cjs"]
 build = ["npm", "run", "build"]
-publicDir = "dist/public"
 
 [workflows]
 runButton = "Project"
@@ -36,8 +35,5 @@ author = "agent"
 
 [[workflows.workflow.tasks]]
 task = "shell.exec"
-args = "npm run dev:client"
+args = "npm run dev"
 waitForPort = 5000
-
-[agent]
-mockupState = "MOCKUP"
