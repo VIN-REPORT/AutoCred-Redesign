@@ -1,0 +1,106 @@
+I have a frontend built with React + Next.js for my website AutoCredInspection.com.
+I need a secure, production-ready backend on Replit that works with my frontend exactly like autokinspection.com.
+
+IMPORTANT:
+- Do NOT show PayPal or Polar buttons on frontend.
+- Payment should be handled via backend redirect flow.
+- Frontend should only show a single "Proceed to Secure Checkout" button after form submission.
+- Use USD $10 fixed payment.
+- All secret keys and EmailJS info will be placeholders.
+
+STACK:
+- Node.js + Express
+- TypeScript (preferred)
+- PayPal REST SDK
+- Optional Polar integration (backend only)
+- EmailJS for sending confirmation emails
+
+========================
+1) FORM SUBMISSION
+========================
+Frontend sends POST /api/submit-form with:
+- First Name
+- Last Name
+- VIN Number (17 alphanumeric characters)
+- Email Address
+
+Backend should:
+- Validate VIN format and length
+- Send confirmation email to client via EmailJS
+- Send admin notification to: autocredinspection.com (via EmailJS)
+- Use placeholders for EmailJS:
+  - SERVICE_ID
+  - TEMPLATE_ID
+  - PUBLIC_KEY
+- Temporarily store submitted data (memory or simple storage)
+
+Frontend must then show **only one button**:
+"Proceed to Secure Checkout"
+
+========================
+2) PAYMENT FLOW
+========================
+Frontend calls: GET /api/checkout
+Backend should:
+- Create a PayPal order (USD $10)
+- Redirect user to PayPal hosted checkout
+- Capture payment after success
+- Send confirmation emails to:
+   - Client: Thank you + report delivery info (max 6 hours)
+   - Admin: client details + payment confirmation
+- Use placeholders for:
+   - PAYPAL_CLIENT_ID
+   - PAYPAL_SECRET
+- Optional Polar integration:
+   - Backend-only (toggle-based or commented)
+   - Use placeholders for Polar keys
+- Ensure secure server-side handling, no secrets exposed to frontend
+
+========================
+3) PAYMENT SUCCESS / FAILURE
+========================
+Endpoints:
+- GET /api/payment-success
+- GET /api/payment-cancel
+
+On success:
+- Capture payment
+- Trigger EmailJS notifications
+- Return JSON response to frontend for confirmation display
+
+On cancel/failure:
+- Return safe JSON response
+- Do not charge
+
+========================
+4) SECURITY & BEST PRACTICES
+========================
+- Validate VIN strictly
+- Prevent duplicate submissions / payments
+- Environment variables for all secrets
+- No refund after 1 hour (logic comment acceptable)
+- Clean folder structure and readable production-level code
+
+========================
+5) ENDPOINT SUMMARY
+========================
+- POST /api/submit-form
+- GET  /api/checkout
+- GET  /api/payment-success
+- GET  /api/payment-cancel
+
+========================
+6) FRONTEND ATTACHMENT
+========================
+- Backend must be easily callable from existing Next.js frontend
+- JSON responses for all endpoints
+- Include short instructions for frontend fetch/axios calls
+
+========================
+7) FINAL EXPECTATION
+========================
+- Full backend code ready to deploy on Replit
+- EmailJS integration placeholders included
+- PayPal / Polar placeholders included
+- Professional, secure, production-ready
+- Compatible with React + Next.js frontend
