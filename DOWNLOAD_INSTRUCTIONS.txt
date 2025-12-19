@@ -1,0 +1,138 @@
+╔════════════════════════════════════════════════════════════════════════════╗
+║                    AUTOCRED INSPECTION - DOWNLOAD FILES                    ║
+╚════════════════════════════════════════════════════════════════════════════╝
+
+📥 HOW TO DOWNLOAD YOUR WEBSITE FILES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+OPTION 1: Download ZIP File (Easiest)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+File: dist-public.zip
+
+Steps:
+1. In Replit file explorer on the left
+2. Look for: dist-public.zip
+3. Right-click → Download
+4. Extract the ZIP file on your computer
+5. Inside you'll find: dist/public/ folder ✓
+
+Size: ~1.5 MB (compressed)
+
+
+OPTION 2: Download Folder Directly
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Steps:
+1. In Replit file explorer on the left
+2. Navigate to: dist → public
+3. Right-click on "public" folder → Download
+4. Your complete website is downloaded! ✓
+
+
+FILES INSIDE DOWNLOAD
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+dist/public/
+├── index.html                    ← Open this in browser to view
+├── favicon.png
+├── opengraph.jpg
+├── SETUP_INSTRUCTIONS.html       ← Setup guide (open in browser)
+└── assets/
+    ├── index-DDkjwoWw.css       ← All styles
+    ├── index-Cg3NKM4u.js        ← All JavaScript
+    └── 3 professional images
+
+
+AFTER DOWNLOAD - NEXT STEPS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+1. Extract/Download the files
+2. Open: SETUP_INSTRUCTIONS.html in your browser
+3. Follow the setup guide
+4. Choose deployment option:
+   • Netlify (easiest) - drag & drop
+   • Self-host on Windows - run simple command
+   • Upload to web hosting
+   • Deploy to Vercel
+
+
+🚀 DEPLOY OPTIONS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+NETLIFY (Recommended)
+✓ Easiest
+✓ Free
+✓ Automatic updates
+✓ Custom domain support
+
+1. Go to: https://netlify.com
+2. Drag & drop "public" folder
+3. Site is LIVE! ✓
+
+WINDOWS SELF-HOST
+✓ Run locally
+✓ Free
+✓ No account needed
+
+1. Download files
+2. Open PowerShell in "public" folder
+3. Run: npx http-server . -p 3000
+4. Visit: http://localhost:3000
+
+WEB HOSTING (Bluehost, GoDaddy, HostGator)
+✓ Traditional hosting
+✓ Custom domain
+✓ FTP upload
+
+1. Download files
+2. Upload to hosting via FTP
+3. Set as public root
+4. Website is live!
+
+
+📝 IMPORTANT NOTES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+✓ All files are production-ready
+✓ Responsive (works on all devices)
+✓ No Replit branding
+✓ All images included
+✓ All animations working
+✓ Forms ready (add EmailJS credentials)
+✓ Payments ready (add PayPal/Polar credentials)
+
+
+📧 TO ENABLE CONTACT FORMS & PAYMENTS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+1. Edit: client/src/config.ts
+2. Add your API credentials:
+   - EmailJS (for forms)
+   - PayPal (for payments)
+   - Polar (alternative)
+3. Run: npm run build
+4. Download new dist/public/ folder
+5. Deploy
+
+
+🆘 NEED HELP?
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Open: SETUP_INSTRUCTIONS.html (included in download)
+
+It has:
+• Step-by-step setup guide
+• Deployment instructions
+• API credential setup
+• Troubleshooting
+
+
+✅ YOU'RE ALL SET!
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Your complete AutoCred Inspection website is ready to download and deploy!
+
+Next: Download the files and go live! 🚀
+
+════════════════════════════════════════════════════════════════════════════════
