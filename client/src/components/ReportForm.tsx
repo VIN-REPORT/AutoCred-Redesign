@@ -118,7 +118,8 @@ export function ReportForm() {
           config.emailjs.publicKey
         ).catch(e => console.error("Admin Email Error", e));
 
-        // Send confirmation to Client
+        // Auto-reply to client is usually handled by EmailJS "Auto-Reply" settings in the dashboard
+        // But we will send a direct confirmation as well to be sure
         emailjs.send(
           config.emailjs.serviceId,
           config.emailjs.paymentTemplateId,
