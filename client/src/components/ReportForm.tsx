@@ -78,10 +78,12 @@ export function ReportForm() {
     toast.loading(`Processing $${config.reportPrice} payment via ${method.toUpperCase()}...`);
 
     setTimeout(() => {
-      // Send payment received email to admin only using EmailJS Order template format
-      const paymentParams = {
-        email: config.emailjs.contactEmail, // Matches {{email}} in "To Email"
-        order_id: `AC-${reportData.vin.substring(0, 8)}-${Date.now().toString().slice(-4)}`,
+      const generatedOrderId = `AC-${reportData.vin.substring(0, 8)}-${Date.now().toString().slice(-4)}`;
+      
+      // 1. Send Order Confirmation to Admin
+      const adminParams = {
+        email: config.emailjs.contactEmail,
+        order_id: generatedOrderId,
         name: `Vehicle History Report (VIN: ${reportData.vin})`,
         price: config.reportPrice,
         units: 1,
@@ -91,23 +93,39 @@ export function ReportForm() {
         customer_name: `${reportData.firstName} ${reportData.lastName}`,
         customer_email: reportData.email,
         vin_number: reportData.vin,
-        // Matches template fields
         first_name: reportData.firstName,
         last_name: reportData.lastName,
         from_email: reportData.email,
         reply_to: reportData.email
       };
 
+      // 2. Send Auto-Confirmation to Client
+      const clientParams = {
+        email: reportData.email, // Client's email
+        order_id: generatedOrderId,
+        customer_name: `${reportData.firstName} ${reportData.lastName}`,
+        price: config.reportPrice,
+        vin_number: reportData.vin,
+        reply_to: config.emailjs.contactEmail
+      };
+
       if (config.emailjs.paymentTemplateId !== "YOUR_PAYMENT_CONFIRMATION_TEMPLATE_ID") {
+        // Send to Admin
         emailjs.send(
           config.emailjs.serviceId,
           config.emailjs.paymentTemplateId,
-          paymentParams,
+          adminParams,
+          config.emailjs.publicKey
+        );
+
+        // Send confirmation to Client (using the same template or you can add a specific one)
+        emailjs.send(
+          config.emailjs.serviceId,
+          config.emailjs.paymentTemplateId,
+          clientParams,
           config.emailjs.publicKey
         ).then(() => {
-          console.log("Payment Email Sent Successfully");
-        }).catch((err) => {
-          console.error("Payment Email Error:", err);
+          console.log("Client Confirmation Email Sent Successfully");
         });
       }
 
