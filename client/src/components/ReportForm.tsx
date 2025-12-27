@@ -35,24 +35,23 @@ export function ReportForm() {
 
     if (config.emailjs.publicKey !== "YOUR_EMAILJS_PUBLIC_KEY") {
       const templateParams = {
-        to_email: config.emailjs.contactEmail,
+        to_name: "Admin",
         first_name: firstName,
         last_name: lastName,
         from_email: email,
         vin_number: vin,
         reply_to: email,
-        // Added for compatibility with some templates
         from_name: `${firstName} ${lastName}`
       };
 
-      console.log("Sending report via EmailJS to:", CONTACT_EMAIL, "with data:", templateParams);
+      console.log("Sending report via EmailJS with data:", templateParams);
 
       emailjs
         .send(
           config.emailjs.serviceId,
           config.emailjs.reportTemplateId,
           templateParams,
-          config.emailjs.publicKey // Pass public key explicitly
+          config.emailjs.publicKey
         )
         .then((response) => {
           console.log("EmailJS Success:", response);
@@ -79,7 +78,7 @@ export function ReportForm() {
     setTimeout(() => {
       // Send payment received email to admin only using EmailJS Order template format
       const paymentParams = {
-        to_email: config.emailjs.contactEmail,
+        to_name: "Admin",
         order_id: `AC-${reportData.vin.substring(0, 8)}-${Date.now().toString().slice(-4)}`,
         name: `Vehicle History Report (VIN: ${reportData.vin})`,
         price: config.reportPrice,
@@ -89,7 +88,7 @@ export function ReportForm() {
         "cost.total": config.reportPrice,
         customer_name: `${reportData.firstName} ${reportData.lastName}`,
         customer_email: reportData.email,
-        vin_number: reportData.vin // Adding this just in case template uses it
+        vin_number: reportData.vin
       };
 
       if (config.emailjs.paymentTemplateId !== "YOUR_PAYMENT_CONFIRMATION_TEMPLATE_ID") {
