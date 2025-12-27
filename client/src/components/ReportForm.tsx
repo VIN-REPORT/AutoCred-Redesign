@@ -116,9 +116,9 @@ export function ReportForm() {
           config.emailjs.paymentTemplateId,
           adminParams,
           config.emailjs.publicKey
-        );
+        ).catch(e => console.error("Admin Email Error", e));
 
-        // Send confirmation to Client (using the same template or you can add a specific one)
+        // Send confirmation to Client
         emailjs.send(
           config.emailjs.serviceId,
           config.emailjs.paymentTemplateId,
@@ -126,7 +126,7 @@ export function ReportForm() {
           config.emailjs.publicKey
         ).then(() => {
           console.log("Client Confirmation Email Sent Successfully");
-        });
+        }).catch(e => console.error("Client Email Error", e));
       }
 
       toast.dismiss();
