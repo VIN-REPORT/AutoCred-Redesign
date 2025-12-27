@@ -35,7 +35,7 @@ export function ReportForm() {
 
     if (config.emailjs.publicKey !== "YOUR_EMAILJS_PUBLIC_KEY") {
       const templateParams = {
-        to_email: CONTACT_EMAIL,
+        to_email: config.emailjs.contactEmail,
         first_name: firstName,
         last_name: lastName,
         from_email: email,
@@ -79,7 +79,7 @@ export function ReportForm() {
     setTimeout(() => {
       // Send payment received email to admin only using EmailJS Order template format
       const paymentParams = {
-        to_email: CONTACT_EMAIL,
+        to_email: config.emailjs.contactEmail,
         order_id: `AC-${reportData.vin.substring(0, 8)}-${Date.now().toString().slice(-4)}`,
         name: `Vehicle History Report (VIN: ${reportData.vin})`,
         price: config.reportPrice,
@@ -88,7 +88,8 @@ export function ReportForm() {
         "cost.tax": "0.00",
         "cost.total": config.reportPrice,
         customer_name: `${reportData.firstName} ${reportData.lastName}`,
-        customer_email: reportData.email
+        customer_email: reportData.email,
+        vin_number: reportData.vin // Adding this just in case template uses it
       };
 
       if (config.emailjs.paymentTemplateId !== "YOUR_PAYMENT_CONFIRMATION_TEMPLATE_ID") {
@@ -97,7 +98,11 @@ export function ReportForm() {
           config.emailjs.paymentTemplateId,
           paymentParams,
           config.emailjs.publicKey
-        );
+        ).then(() => {
+          console.log("Payment Email Sent Successfully");
+        }).catch((err) => {
+          console.error("Payment Email Error:", err);
+        });
       }
 
       toast.dismiss();
