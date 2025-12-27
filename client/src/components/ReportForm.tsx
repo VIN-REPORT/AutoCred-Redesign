@@ -49,17 +49,18 @@ export function ReportForm() {
         .send(
           config.emailjs.serviceId,
           config.emailjs.reportTemplateId,
-          templateParams
+          templateParams,
+          config.emailjs.publicKey // Pass public key explicitly
         )
         .then((response) => {
           console.log("EmailJS Success:", response);
           setReportSubmitted(true);
-          toast.success(`✅ Details sent to ${CONTACT_EMAIL}!\n\nClient: ${firstName} ${lastName}\nEmail: ${email}\nVIN: ${vin}`);
+          toast.success(`✅ Details sent to ${CONTACT_EMAIL}!`);
         })
         .catch((error) => {
           console.error("EmailJS Error:", error);
           setReportSubmitted(true);
-          toast.success("Details captured! Proceed with payment.");
+          toast.error("Error sending email, but details captured. Proceed to payment.");
         });
     } else {
       setReportSubmitted(true);
@@ -74,6 +75,25 @@ export function ReportForm() {
     toast.loading(`Processing $${config.reportPrice} payment via ${method.toUpperCase()}...`);
 
     setTimeout(() => {
+      // Send payment confirmation email
+      const paymentParams = {
+        to_email: CONTACT_EMAIL,
+        customer_email: reportData.email,
+        customer_name: `${reportData.firstName} ${reportData.lastName}`,
+        vin_number: reportData.vin,
+        amount: config.reportPrice,
+        payment_method: method
+      };
+
+      if (config.emailjs.paymentTemplateId !== "YOUR_PAYMENT_CONFIRMATION_TEMPLATE_ID") {
+        emailjs.send(
+          config.emailjs.serviceId,
+          config.emailjs.paymentTemplateId,
+          paymentParams,
+          config.emailjs.publicKey
+        );
+      }
+
       toast.dismiss();
       toast.success(`✅ Payment of $${config.reportPrice} completed!\n\nReport sent to ${reportData.email}`);
       setPaymentComplete(true);
@@ -142,7 +162,7 @@ export function ReportForm() {
 
                 <div className="pt-4">
                   <Button type="submit" className="w-full bg-primary hover:bg-red-700 text-white py-6 text-lg shadow-lg shadow-red-500/20">
-                    Continue to Payment
+                    Submit Request
                   </Button>
                   
                   <p className="text-center text-xs text-gray-500 mt-4">
