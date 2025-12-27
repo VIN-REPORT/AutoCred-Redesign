@@ -27,26 +27,10 @@ export function Contact() {
       return;
     }
 
-    const templateParams = {
-      to_email: CONTACT_EMAIL,
-      from_name: `${firstName} ${lastName}`,
-      from_email: email,
-      message: message,
-      reply_to: email
-    };
-
-    try {
-      emailjs.send(
-        config.emailjs.serviceId,
-        config.emailjs.contactTemplateId,
-        templateParams
-      );
-      toast.success("Message sent to " + CONTACT_EMAIL + "! We'll get back to you shortly.");
-      (e.target as HTMLFormElement).reset();
-    } catch (error) {
-      toast.error("Failed to send message. Please try again.");
-      console.error("EmailJS error:", error);
-    }
+    const mailtoUrl = `mailto:${CONTACT_EMAIL}?subject=General Inquiry from ${firstName} ${lastName}&body=Name: ${firstName} ${lastName}%0D%0AEmail: ${email}%0D%0A%0D%0AMessage:%0D%0A${encodeURIComponent(message)}`;
+    window.location.href = mailtoUrl;
+    toast.success("Opening your email client to send message to " + CONTACT_EMAIL);
+    (e.target as HTMLFormElement).reset();
   };
 
   return (
