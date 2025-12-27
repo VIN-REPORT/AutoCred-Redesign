@@ -9,7 +9,7 @@ export const config = {
     publicKey: "W5UGbJLqqTooUZHBV",
     serviceId: "service_ymndajk",
     reportTemplateId: "template_jnkxpve",
-    paymentTemplateId: "template_payment_receive",
+    paymentTemplateId: "template_cfzsu6k",
     contactTemplateId: "YOUR_CONTACT_TEMPLATE_ID",
     contactEmail: "autocredinspection@gmail.com"
   },
