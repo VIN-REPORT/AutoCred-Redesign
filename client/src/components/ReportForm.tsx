@@ -118,18 +118,35 @@ export function ReportForm() {
           config.emailjs.publicKey
         ).catch(e => console.error("Admin Email Error", e));
 
-        // 2. Send Direct Confirmation to Client (Thank You)
-        // We use the same service and public key, but we can customize the data
+      // 2. Send Direct Confirmation to Client (Thank You)
+      // We explicitly set the "email" field to the client's email address
+      const clientConfirmationParams = {
+        email: reportData.email, // Client's email address
+        order_id: generatedOrderId,
+        customer_name: `${reportData.firstName} ${reportData.lastName}`,
+        price: config.reportPrice,
+        vin_number: reportData.vin,
+        message: "Thank you for your order! Your vehicle history report is being processed and will be sent to you shortly.",
+        reply_to: config.emailjs.contactEmail
+      };
+
+      if (config.emailjs.paymentTemplateId !== "YOUR_PAYMENT_CONFIRMATION_TEMPLATE_ID") {
+        // Send notification to Admin
+        emailjs.send(
+          config.emailjs.serviceId,
+          config.emailjs.paymentTemplateId,
+          adminParams,
+          config.emailjs.publicKey
+        ).catch(e => console.error("Admin Email Error", e));
+
+        // Send thank you to Client
         emailjs.send(
           config.emailjs.serviceId,
           config.emailjs.paymentTemplateId, 
-          {
-            ...clientParams,
-            message: "Thank you for your order! Your vehicle history report is being processed and will be sent to you shortly."
-          },
+          clientConfirmationParams,
           config.emailjs.publicKey
         ).then(() => {
-          console.log("Client Confirmation Email Sent Successfully");
+          console.log("Client Confirmation Email Sent Successfully to:", reportData.email);
         }).catch(e => console.error("Client Email Error", e));
       }
 
