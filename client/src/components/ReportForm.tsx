@@ -39,10 +39,9 @@ export function ReportForm() {
         from_name: `${firstName} ${lastName}`,
         from_email: email,
         vin_number: vin,
-        client_name: `${firstName} ${lastName}`,
-        client_email: email,
-        client_vin: vin,
-        message: `Report Request\n\nClient: ${firstName} ${lastName}\nEmail: ${email}\nVIN: ${vin}`
+        message_type: "Report",
+        message: `New Report Request for VIN: ${vin}`,
+        reply_to: email
       };
 
       console.log("Sending report via EmailJS to:", CONTACT_EMAIL, "with data:", templateParams);

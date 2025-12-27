@@ -31,6 +31,7 @@ export function Contact() {
       to_email: CONTACT_EMAIL,
       from_name: `${firstName} ${lastName}`,
       from_email: email,
+      message_type: "Inquiry",
       message: message,
       reply_to: email
     };
