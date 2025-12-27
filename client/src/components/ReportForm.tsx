@@ -99,29 +99,9 @@ export function ReportForm() {
         reply_to: reportData.email
       };
 
-      // 2. Send Auto-Confirmation to Client
-      const clientParams = {
-        email: reportData.email, // Client's email
-        order_id: generatedOrderId,
-        customer_name: `${reportData.firstName} ${reportData.lastName}`,
-        price: config.reportPrice,
-        vin_number: reportData.vin,
-        reply_to: config.emailjs.contactEmail
-      };
-
-      if (config.emailjs.paymentTemplateId !== "YOUR_PAYMENT_CONFIRMATION_TEMPLATE_ID") {
-        // 1. Send Order Confirmation to Admin
-        emailjs.send(
-          config.emailjs.serviceId,
-          config.emailjs.paymentTemplateId,
-          adminParams,
-          config.emailjs.publicKey
-        ).catch(e => console.error("Admin Email Error", e));
-
       // 2. Send Direct Confirmation to Client (Thank You)
-      // We explicitly set the "email" field to the client's email address
       const clientConfirmationParams = {
-        email: reportData.email, // Client's email address
+        email: reportData.email.trim(),
         order_id: generatedOrderId,
         customer_name: `${reportData.firstName} ${reportData.lastName}`,
         price: config.reportPrice,
@@ -131,7 +111,6 @@ export function ReportForm() {
       };
 
       if (config.emailjs.paymentTemplateId !== "YOUR_PAYMENT_CONFIRMATION_TEMPLATE_ID") {
-        // Send notification to Admin
         emailjs.send(
           config.emailjs.serviceId,
           config.emailjs.paymentTemplateId,
@@ -139,14 +118,13 @@ export function ReportForm() {
           config.emailjs.publicKey
         ).catch(e => console.error("Admin Email Error", e));
 
-        // Send thank you to Client
         emailjs.send(
           config.emailjs.serviceId,
           config.emailjs.paymentTemplateId, 
           clientConfirmationParams,
           config.emailjs.publicKey
         ).then(() => {
-          console.log("Client Confirmation Email Sent Successfully to:", reportData.email);
+          console.log("Client Confirmation Email Sent Successfully");
         }).catch(e => console.error("Client Email Error", e));
       }
 
