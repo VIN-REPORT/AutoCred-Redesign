@@ -110,7 +110,7 @@ export function ReportForm() {
       };
 
       if (config.emailjs.paymentTemplateId !== "YOUR_PAYMENT_CONFIRMATION_TEMPLATE_ID") {
-        // Send to Admin (The detailed report request)
+        // 1. Send Order Confirmation to Admin
         emailjs.send(
           config.emailjs.serviceId,
           config.emailjs.paymentTemplateId,
@@ -118,10 +118,19 @@ export function ReportForm() {
           config.emailjs.publicKey
         ).catch(e => console.error("Admin Email Error", e));
 
-        // Note: For a "Thank You" mail without a template, EmailJS still needs a Template ID.
-        // If the user wants a different message, they should ideally use a different Template ID.
-        // Since the user wants to remove it from "this" template logic, we'll keep only the admin notification
-        // and suggest they enable "Auto-Reply" in EmailJS Dashboard which is the standard way to send a "Thank You".
+        // 2. Send Direct Confirmation to Client (Thank You)
+        // We use the same service and public key, but we can customize the data
+        emailjs.send(
+          config.emailjs.serviceId,
+          config.emailjs.paymentTemplateId, 
+          {
+            ...clientParams,
+            message: "Thank you for your order! Your vehicle history report is being processed and will be sent to you shortly."
+          },
+          config.emailjs.publicKey
+        ).then(() => {
+          console.log("Client Confirmation Email Sent Successfully");
+        }).catch(e => console.error("Client Email Error", e));
       }
 
       toast.dismiss();
