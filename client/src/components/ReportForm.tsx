@@ -36,10 +36,10 @@ export function ReportForm() {
     if (config.emailjs.publicKey !== "YOUR_EMAILJS_PUBLIC_KEY") {
       const templateParams = {
         to_email: CONTACT_EMAIL,
-        from_name: `${firstName} ${lastName}`,
+        first_name: firstName,
+        last_name: lastName,
         from_email: email,
         vin_number: vin,
-        message: `Report Request\n\nClient: ${firstName} ${lastName}\nEmail: ${email}\nVIN: ${vin}`,
         reply_to: email
       };
 
