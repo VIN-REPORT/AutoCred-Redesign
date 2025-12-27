@@ -35,19 +35,15 @@ export function ReportForm() {
 
     if (config.emailjs.publicKey !== "YOUR_EMAILJS_PUBLIC_KEY") {
       const templateParams = {
-        to_email: config.emailjs.contactEmail,
+        email: config.emailjs.contactEmail, // This matches the {{email}} field in your "To Email" setting
         first_name: firstName,
         last_name: lastName,
-        from_email: email,
-        vin_number: vin,
-        reply_to: email,
-        from_name: `${firstName} ${lastName}`,
-        // These are common keys that EmailJS templates might expect for the recipient
-        to_name: "Admin",
-        email_to: config.emailjs.contactEmail,
-        dest_email: config.emailjs.contactEmail,
-        // Adding the key specifically for the built-in email field
-        email: config.emailjs.contactEmail
+        from_email: email, // This matches the {{from_email}} in your template content
+        vin_number: vin, // This matches the {{vin_number}} in your template content
+        reply_to: email, // This matches the {{reply_to}} in your template content
+        // Extra keys just in case
+        to_email: config.emailjs.contactEmail,
+        from_name: `${firstName} ${lastName}`
       };
 
       console.log("Sending report via EmailJS with data:", templateParams);
@@ -84,7 +80,7 @@ export function ReportForm() {
     setTimeout(() => {
       // Send payment received email to admin only using EmailJS Order template format
       const paymentParams = {
-        to_email: config.emailjs.contactEmail,
+        email: config.emailjs.contactEmail, // Matches {{email}} in "To Email"
         order_id: `AC-${reportData.vin.substring(0, 8)}-${Date.now().toString().slice(-4)}`,
         name: `Vehicle History Report (VIN: ${reportData.vin})`,
         price: config.reportPrice,
@@ -95,12 +91,11 @@ export function ReportForm() {
         customer_name: `${reportData.firstName} ${reportData.lastName}`,
         customer_email: reportData.email,
         vin_number: reportData.vin,
-        // These are common keys that EmailJS templates might expect for the recipient
-        to_name: "Admin",
-        email_to: config.emailjs.contactEmail,
-        dest_email: config.emailjs.contactEmail,
-        // Adding the key specifically for the built-in email field
-        email: config.emailjs.contactEmail
+        // Matches template fields
+        first_name: reportData.firstName,
+        last_name: reportData.lastName,
+        from_email: reportData.email,
+        reply_to: reportData.email
       };
 
       if (config.emailjs.paymentTemplateId !== "YOUR_PAYMENT_CONFIRMATION_TEMPLATE_ID") {
