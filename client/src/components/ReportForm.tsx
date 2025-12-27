@@ -39,8 +39,7 @@ export function ReportForm() {
         from_name: `${firstName} ${lastName}`,
         from_email: email,
         vin_number: vin,
-        message_type: "Report",
-        message: `New Report Request for VIN: ${vin}`,
+        message: `Report Request\n\nClient: ${firstName} ${lastName}\nEmail: ${email}\nVIN: ${vin}`,
         reply_to: email
       };
 
