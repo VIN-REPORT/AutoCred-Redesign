@@ -75,14 +75,14 @@ export function ReportForm() {
     toast.loading(`Processing $${config.reportPrice} payment via ${method.toUpperCase()}...`);
 
     setTimeout(() => {
-      // Send payment confirmation email
+      // Send payment received email to admin only
       const paymentParams = {
         to_email: CONTACT_EMAIL,
-        customer_email: reportData.email,
-        customer_name: `${reportData.firstName} ${reportData.lastName}`,
-        vin_number: reportData.vin,
         amount: config.reportPrice,
-        payment_method: method
+        payment_method: method,
+        customer_name: `${reportData.firstName} ${reportData.lastName}`,
+        customer_email: reportData.email,
+        vin_number: reportData.vin
       };
 
       if (config.emailjs.paymentTemplateId !== "YOUR_PAYMENT_CONFIRMATION_TEMPLATE_ID") {
@@ -95,7 +95,7 @@ export function ReportForm() {
       }
 
       toast.dismiss();
-      toast.success(`✅ Payment of $${config.reportPrice} completed!\n\nReport sent to ${reportData.email}`);
+      toast.success(`✅ Payment of $${config.reportPrice} completed!`);
       setPaymentComplete(true);
       setIsProcessing(false);
     }, 2000);
