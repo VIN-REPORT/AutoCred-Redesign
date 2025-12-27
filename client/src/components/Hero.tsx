@@ -1,6 +1,6 @@
 import { Check, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import heroImage from "@assets/stock_images/professional_mechani_f76e020a.jpg";
+import heroImage from "@assets/generated_images/luxury_red_car_front_view_studio_shot.png";
 
 export function Hero() {
   const scrollToReport = () => {
