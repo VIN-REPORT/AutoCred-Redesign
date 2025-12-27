@@ -48,7 +48,7 @@ export function ReportForm() {
       emailjs
         .send(
           config.emailjs.serviceId,
-          config.emailjs.templateId,
+          config.emailjs.reportTemplateId,
           templateParams
         )
         .then((response) => {

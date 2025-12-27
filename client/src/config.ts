@@ -8,7 +8,8 @@ export const config = {
   emailjs: {
     publicKey: "YOUR_EMAILJS_PUBLIC_KEY",
     serviceId: "YOUR_EMAILJS_SERVICE_ID",
-    templateId: "template_jnkxpve",
+    reportTemplateId: "template_jnkxpve",
+    contactTemplateId: "YOUR_CONTACT_TEMPLATE_ID",
     contactEmail: "autocredinspection@gmail.com"
   },
 

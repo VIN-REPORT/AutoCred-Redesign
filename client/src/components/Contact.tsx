@@ -38,7 +38,7 @@ export function Contact() {
     try {
       emailjs.send(
         config.emailjs.serviceId,
-        config.emailjs.templateId,
+        config.emailjs.contactTemplateId,
         templateParams
       );
       toast.success("Message sent to " + CONTACT_EMAIL + "! We'll get back to you shortly.");
