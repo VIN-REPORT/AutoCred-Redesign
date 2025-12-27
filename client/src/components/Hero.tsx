@@ -4,8 +4,10 @@ import heroImage from "@assets/generated_images/luxury_red_car_front_view_studio
 
 export function Hero() {
   const scrollToReport = () => {
-    const element = document.querySelector("#report");
-    if (element) element.scrollIntoView({ behavior: "smooth" });
+    const element = document.querySelector("#report-form");
+    if (element) {
+      element.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
   };
 
   return (
