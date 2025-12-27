@@ -75,14 +75,18 @@ export function ReportForm() {
     toast.loading(`Processing $${config.reportPrice} payment via ${method.toUpperCase()}...`);
 
     setTimeout(() => {
-      // Send payment received email to admin only
+      // Send payment received email to admin only using EmailJS Order template format
       const paymentParams = {
         to_email: CONTACT_EMAIL,
-        amount: config.reportPrice,
-        payment_method: method,
+        order_id: `AC-${reportData.vin.substring(0, 8)}-${Date.now().toString().slice(-4)}`,
+        name: `Vehicle History Report (VIN: ${reportData.vin})`,
+        price: config.reportPrice,
+        units: 1,
+        "cost.shipping": "0.00",
+        "cost.tax": "0.00",
+        "cost.total": config.reportPrice,
         customer_name: `${reportData.firstName} ${reportData.lastName}`,
-        customer_email: reportData.email,
-        vin_number: reportData.vin
+        customer_email: reportData.email
       };
 
       if (config.emailjs.paymentTemplateId !== "YOUR_PAYMENT_CONFIRMATION_TEMPLATE_ID") {
