@@ -45,7 +45,9 @@ export function ReportForm() {
         // These are common keys that EmailJS templates might expect for the recipient
         to_name: "Admin",
         email_to: config.emailjs.contactEmail,
-        dest_email: config.emailjs.contactEmail
+        dest_email: config.emailjs.contactEmail,
+        // Adding the key specifically for the built-in email field
+        email: config.emailjs.contactEmail
       };
 
       console.log("Sending report via EmailJS with data:", templateParams);
@@ -96,7 +98,9 @@ export function ReportForm() {
         // These are common keys that EmailJS templates might expect for the recipient
         to_name: "Admin",
         email_to: config.emailjs.contactEmail,
-        dest_email: config.emailjs.contactEmail
+        dest_email: config.emailjs.contactEmail,
+        // Adding the key specifically for the built-in email field
+        email: config.emailjs.contactEmail
       };
 
       if (config.emailjs.paymentTemplateId !== "YOUR_PAYMENT_CONFIRMATION_TEMPLATE_ID") {
