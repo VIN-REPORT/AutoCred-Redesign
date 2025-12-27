@@ -40,7 +40,9 @@ export function ReportForm() {
         last_name: lastName,
         from_email: email,
         vin_number: vin,
-        reply_to: email
+        reply_to: email,
+        // Added for compatibility with some templates
+        from_name: `${firstName} ${lastName}`
       };
 
       console.log("Sending report via EmailJS to:", CONTACT_EMAIL, "with data:", templateParams);
