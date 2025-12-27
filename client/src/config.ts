@@ -6,8 +6,8 @@
 export const config = {
   // EmailJS Configuration
   emailjs: {
-    publicKey: "YOUR_EMAILJS_PUBLIC_KEY",
-    serviceId: "YOUR_EMAILJS_SERVICE_ID",
+    publicKey: "W5UGbJLqqTooUZHBV",
+    serviceId: "service_ymndajk",
     reportTemplateId: "template_jnkxpve",
     contactTemplateId: "YOUR_CONTACT_TEMPLATE_ID",
     contactEmail: "autocredinspection@gmail.com"
