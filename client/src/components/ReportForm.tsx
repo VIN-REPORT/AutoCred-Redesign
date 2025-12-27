@@ -42,9 +42,10 @@ export function ReportForm() {
         vin_number: vin,
         reply_to: email,
         from_name: `${firstName} ${lastName}`,
-        // Some EmailJS templates use these alternative keys
-        recipient_email: config.emailjs.contactEmail,
-        admin_email: config.emailjs.contactEmail
+        // These are common keys that EmailJS templates might expect for the recipient
+        to_name: "Admin",
+        email_to: config.emailjs.contactEmail,
+        dest_email: config.emailjs.contactEmail
       };
 
       console.log("Sending report via EmailJS with data:", templateParams);
@@ -92,9 +93,10 @@ export function ReportForm() {
         customer_name: `${reportData.firstName} ${reportData.lastName}`,
         customer_email: reportData.email,
         vin_number: reportData.vin,
-        // Alternative keys for payment templates
-        recipient_email: config.emailjs.contactEmail,
-        admin_email: config.emailjs.contactEmail
+        // These are common keys that EmailJS templates might expect for the recipient
+        to_name: "Admin",
+        email_to: config.emailjs.contactEmail,
+        dest_email: config.emailjs.contactEmail
       };
 
       if (config.emailjs.paymentTemplateId !== "YOUR_PAYMENT_CONFIRMATION_TEMPLATE_ID") {
