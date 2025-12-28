@@ -107,7 +107,10 @@ export function ReportForm() {
         price: config.reportPrice,
         vin_number: reportData.vin,
         message: "Thank you for your order! Your vehicle history report is being processed and will be sent to you shortly.",
-        reply_to: config.emailjs.contactEmail
+        reply_to: config.emailjs.contactEmail,
+        // Adding fields that might be expected by the template to avoid "corrupted" error
+        to_email: reportData.email.trim(),
+        recipient_email: reportData.email.trim()
       };
 
       if (config.emailjs.paymentTemplateId !== "YOUR_PAYMENT_CONFIRMATION_TEMPLATE_ID") {
